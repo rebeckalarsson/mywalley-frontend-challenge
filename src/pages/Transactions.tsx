@@ -10,11 +10,24 @@ import { SearchX } from "lucide-react";
 export default function Transactions() {
   const [loading, setLoading] = useState<boolean>(true);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [drawer, setDrawer] = useState<{
+    content?: Transaction;
+    isOpen: boolean;
+  }>({
+    content: undefined,
+    isOpen: false,
+  });
+  const toggleDrawer = (transaction: Transaction, shouldOpen: boolean) =>
+    setDrawer({
+      content: transaction,
+      isOpen: shouldOpen,
+    });
 
   const fetchTransactions = async () => {
     await getTransations()
       .then((resp) => {
         console.log({ resp });
+        setTransactions(resp.transactions);
         setLoading(false);
       })
       .catch((err) => {
@@ -29,9 +42,11 @@ export default function Transactions() {
       fetchTransactions();
     }, 3000);
     return () => clearTimeout(timeoutId);
-
-    // console.log({ data });
   }, []);
+
+  useEffect(() => {
+    console.log({ transactions, length: transactions.length });
+  }, [transactions]);
 
   return (
     <>
@@ -39,20 +54,40 @@ export default function Transactions() {
         <Spinner />
       ) : (
         <div>
+          <Drawer
+            isOpen={drawer.isOpen}
+            children={
+              <>
+                {drawer.content ? (
+                  <div>{drawer.content.id}</div>
+                ) : (
+                  <CardItem className="no-content-container">
+                    <SearchX size={20} area-label="no content" />
+                    <p>
+                      Hoppsan! Här gick något fel, vi kan inte visa denna
+                      transaktionen. Kontakta kundservice för vidare hjälp!
+                    </p>
+                  </CardItem>
+                )}
+              </>
+            }
+          />
           {transactions.length ? (
-            <>
+            <div className="transactions-container">
               {transactions.map((trans, _i) => {
-                <CardItem
-                  onClick={() => console.log("Show drawer")}
-                  children={
-                    <TransactionsGrid
-                      transaction={trans}
-                      key={"transaction-key" + _i}
-                    />
-                  }
-                />;
+                return (
+                  <CardItem
+                    onClick={() => toggleDrawer(trans, true)}
+                    children={
+                      <TransactionsGrid
+                        transaction={trans}
+                        key={"transaction-key" + _i}
+                      />
+                    }
+                  />
+                );
               })}
-            </>
+            </div>
           ) : (
             <CardItem className="no-content-container">
               <SearchX size={20} area-label="no content" />
@@ -62,7 +97,6 @@ export default function Transactions() {
               </p>
             </CardItem>
           )}
-          <Drawer isOpen={true} children={<>Hello</>} />
         </div>
       )}
     </>
