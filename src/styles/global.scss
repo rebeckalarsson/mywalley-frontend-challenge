@@ -142,3 +142,20 @@ header {
     @include spinner;
   }
 }
+
+.drawer {
+  @include drawer;
+}
+
+.no-content-container {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-md;
+  align-items: center;
+
+  svg {
+    height: 2rem;
+    width: 2rem;
+    stroke: $color-info;
+  }
+}

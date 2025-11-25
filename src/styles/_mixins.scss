@@ -118,3 +118,16 @@
     -webkit-transform: rotate(360deg);
   }
 }
+
+@mixin drawer {
+  height: 100vh;
+  width: 200px;
+  background-color: $color-primary-light;
+  transition: all 0.3s ease-in-out;
+  transform: translate(-200px);
+  position: absolute;
+
+  .open {
+    transform: translate(0);
+  }
+}

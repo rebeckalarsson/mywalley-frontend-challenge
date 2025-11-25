@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./styles/global.scss";
-import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorBoundary from "./page-views/ErrorBoundary";
 import Transactions from "./pages/Transactions";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
