@@ -1,21 +1,36 @@
+import { House } from "lucide-react";
+import Button from "./Button";
+import { useNavigate } from "react-router-dom";
+
 export default function Header() {
+  let navigate = useNavigate();
   return (
     <header>
-      <div>Walley</div>
-      <ul>
-        <li>
-          <a href="default.asp">Home</a>
-        </li>
-        <li>
-          <a href="news.asp">News</a>
-        </li>
-        <li>
-          <a href="contact.asp">Contact</a>
-        </li>
-        <li>
-          <a href="about.asp">About</a>
-        </li>
-      </ul>
+      <h1 aria-label="navigate home" onClick={() => navigate("/")}>
+        Walley
+      </h1>
+      <nav aria-label="global page nav">
+        <ul>
+          <li>
+            <Button
+              variant="navigation"
+              aria-label="navigate home button"
+              onClick={() => navigate("/")}
+            >
+              <House size={16} aria-label="house: home" />
+            </Button>
+          </li>
+          <li>
+            <Button
+              variant="navigation"
+              aria-label="navigate to transactions button"
+              onClick={() => navigate("/")}
+            >
+              Transactions
+            </Button>
+          </li>
+        </ul>
+      </nav>
     </header>
   );
 }

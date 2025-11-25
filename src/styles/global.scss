@@ -31,7 +31,9 @@ body {
   }
 }
 
-#main-content {
+#main-content,
+header,
+footer {
   margin: $spacing-sm;
 
   @include tablet {
@@ -41,6 +43,12 @@ body {
   @include desktop {
     margin: $spacing-xl;
   }
+}
+
+ul,
+li {
+  list-style: unset;
+  list-style-type: none;
 }
 
 // Ensure links are accessible
@@ -111,5 +119,17 @@ textarea {
 
   @include desktop {
     max-width: $breakpoint-wide;
+  }
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
   }
 }
