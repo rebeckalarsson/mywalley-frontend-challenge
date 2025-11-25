@@ -1,5 +1,5 @@
-@use './variables' as *;
-@use './mixins' as *;
+@use "./variables" as *;
+@use "./mixins" as *;
 
 * {
   box-sizing: border-box;
@@ -23,6 +23,24 @@ body {
 
 #root {
   min-height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include desktop {
+    max-width: $breakpoint-wide;
+  }
+}
+
+#main-content {
+  margin: $spacing-sm;
+
+  @include tablet {
+    margin: $spacing-md;
+  }
+
+  @include desktop {
+    margin: $spacing-xl;
+  }
 }
 
 // Ensure links are accessible
@@ -40,8 +58,9 @@ a {
 // Button reset
 button {
   font-family: inherit;
-  
+
   @include focus-visible;
+  @include button-base;
 }
 
 // Form elements
@@ -50,7 +69,7 @@ select,
 textarea {
   font-family: inherit;
   font-size: inherit;
-  
+
   @include focus-visible;
 }
 
@@ -73,5 +92,24 @@ textarea {
     clip: auto;
     overflow: visible;
     white-space: normal;
+  }
+}
+
+.card {
+  @include card;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: $color-primary-dark;
+  color: $color-primary-light;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include desktop {
+    max-width: $breakpoint-wide;
   }
 }
