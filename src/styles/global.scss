@@ -133,3 +133,12 @@ header {
     gap: 1rem;
   }
 }
+
+.spinner-container {
+  @include center-content;
+  margin-top: 3rem;
+
+  .spinner {
+    @include spinner;
+  }
+}

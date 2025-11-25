@@ -1,13 +1,15 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getTransations } from "../api/getTransactions";
-import Card from "../components/card";
-import Footer from "../components/Footer";
+import Card from "../components/Card";
+import Spinner from "../components/Spinner";
 
 export default function Transactions() {
+  const [loading, setLoading] = useState<boolean>(true);
   const fetchTransactions = async () => {
     await getTransations()
       .then((resp) => {
         console.log({ resp });
+        setLoading(false);
       })
       .catch((err) => {
         console.error("Could not fetch transactions: ", { err });
@@ -16,17 +18,24 @@ export default function Transactions() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const timeoutId = setTimeout(() => {
       fetchTransactions();
-    }, 1000);
+    }, 3000);
     return () => clearTimeout(timeoutId);
 
     // console.log({ data });
   }, []);
 
   return (
-    <div>
-      <Card />
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div>
+          <Card />
+        </div>
+      )}
+    </>
   );
 }
