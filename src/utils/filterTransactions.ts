@@ -1,5 +1,6 @@
 import type { Transaction } from "../types/transaction";
 import type { ITransactionFilter } from "../types/context";
+import { isDateInRange } from "./dateUtils";
 
 /**
  * Filters transactions based on the provided filter criteria.
@@ -46,6 +47,19 @@ export function filterTransactions(
         transaction.paymentType !== "installment" ||
         !transaction.installmentPlan ||
         transaction.installmentPlan.frequency !== filters.installmentFrequency
+      ) {
+        return false;
+      }
+    }
+
+    // Check date range filter: only apply when both startDate and endDate are provided
+    if (filters.startDate !== "" && filters.endDate !== "") {
+      if (
+        !isDateInRange(
+          transaction.purchaseDate,
+          filters.startDate,
+          filters.endDate
+        )
       ) {
         return false;
       }

@@ -7,6 +7,8 @@ export const initialState: ITransactionState = {
     paymentType: "all",
     paymentMethod: "all",
     installmentFrequency: "all",
+    startDate: "",
+    endDate: "",
   },
   transactions: [],
 };

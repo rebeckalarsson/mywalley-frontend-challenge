@@ -1,8 +1,13 @@
+import clsx from "clsx";
+import { CardItem } from "../components/Card";
 import type {
   PaymentMethod,
   Transaction,
   InstallmentPlan,
 } from "../types/transaction";
+import { formatCurrency } from "../utils/currencyUtils";
+import { formatDate, isPastDate } from "../utils/dateUtils";
+import TransactionsGrid from "./TransactionsGrid";
 
 interface ITransactionDetails {
   transaction: Transaction;
@@ -13,6 +18,7 @@ export default function TransactionsDetails({
 }: ITransactionDetails) {
   return (
     <div className="transaction-details-grid">
+      <TransactionsGrid transaction={transaction} />
       {Object.entries(transaction).map(([key, value]) => {
         if (key === "paymentMethod") {
           return (
@@ -28,12 +34,6 @@ export default function TransactionsDetails({
         if (typeof value === "object") {
           return;
         }
-
-        return (
-          <div key={key} className="grid-item">
-            <span>{key}</span> <span>{value}</span>
-          </div>
-        );
       })}
     </div>
   );
@@ -44,17 +44,40 @@ const InstallmentPlanContainer = ({
 }: {
   installmentPlan: InstallmentPlan;
 }) => {
+  const hasAllInstallmentsPaid = () =>
+    installmentPlan.paidInstallments === installmentPlan.totalInstallments;
+
   return (
-    <div>
-      {Object.entries(installmentPlan).map(([key, value]) => {
-        return (
-          <div key={key}>
-            <div>{key}</div>
-            <div>{value}</div>
-          </div>
-        );
-      })}
-    </div>
+    <CardItem
+      className={clsx("transation-grid", hasAllInstallmentsPaid() && "success")}
+    >
+      <div className="grid-item">
+        <span>Betalfrekvens</span>
+        <span>{installmentPlan.frequency}</span>
+      </div>
+      <div className="grid-item">
+        <span>Att betala in</span>
+        <span>{formatCurrency(installmentPlan.installmentAmount)}</span>
+      </div>
+      <div className="grid-item">
+        <span>Nästa betaldatum</span>
+        <span
+          className={clsx(
+            isPastDate(installmentPlan.nextPaymentDate) && "error"
+          )}
+        >
+          {formatDate(installmentPlan.nextPaymentDate)}
+        </span>
+      </div>
+      <div className="grid-item">
+        <span>Antal betalade</span>
+        <span>{installmentPlan.paidInstallments}</span>
+      </div>
+      <div className="grid-item">
+        <span>Totalt antal betalningar</span>
+        <span>{installmentPlan.totalInstallments}</span>
+      </div>
+    </CardItem>
   );
 };
 
@@ -64,14 +87,15 @@ const PaymentInformationContainer = ({
   paymentMethod: PaymentMethod;
 }) => {
   return (
-    <div>
-      {Object.values(paymentMethod).map((item, _i) => {
-        return (
-          <div key={"payment-method-item" + _i} className="payment-method-item">
-            {item}
-          </div>
-        );
-      })}
-    </div>
+    <CardItem className="transation-grid">
+      <div className="grid-item">
+        <span>Betalmetod</span>
+        <span>{paymentMethod.type}</span>
+      </div>
+      <div className="grid-item">
+        <span>Sista 4 siffrorna</span>
+        <span>{paymentMethod.last4}</span>
+      </div>
+    </CardItem>
   );
 };

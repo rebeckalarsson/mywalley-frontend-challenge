@@ -17,7 +17,8 @@ export function CardItem({ onClick, children, className }: ICardProps) {
         }
       }}
       className={clsx("card", className)}
-      tabIndex={0}
+      tabIndex={onClick ? 0 : -1}
+      role={onClick ? "button" : "listbox"}
     >
       {children}
     </div>

@@ -11,6 +11,7 @@ import TransactionsDetails from "../page-views/TransactionsDetails";
 import TransactionsFilter from "../page-views/TransactionsFilter";
 import { TransactionContext } from "../context/transaction-context";
 import { filterTransactions } from "../utils/filterTransactions";
+import clsx from "clsx";
 
 export default function Transactions() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -82,7 +83,7 @@ export default function Transactions() {
             open={drawer.isOpen}
             onCloseDrawer={closeDrawer}
             children={
-              <div>
+              <div className="drawer-content">
                 {drawer.content ? (
                   <TransactionsDetails transaction={drawer.content} />
                 ) : (
@@ -118,6 +119,10 @@ export default function Transactions() {
                     return (
                       <CardItem
                         key={"transaction-card-key" + _i}
+                        className={clsx(
+                          trans.status === "failed" && "error",
+                          trans.status === "cancelled" && "warning"
+                        )}
                         onClick={() => openDrawer(trans, true)}
                         children={<TransactionsGrid transaction={trans} />}
                       />

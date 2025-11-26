@@ -4,6 +4,7 @@ import { TransactionContext } from "../context/transaction-context";
 import type { ITransactionFilter } from "../types/context";
 import { SlidersHorizontal } from "lucide-react";
 import Button from "../components/Button";
+import { DatePicker } from "../components/DatePicker";
 
 export default function TransactionsFilter() {
   const [showFilter, setShowFilter] = useState<boolean>(false);
@@ -35,6 +36,12 @@ export default function TransactionsFilter() {
     { value: "all", label: "Alla" },
     { label: "Per månad", value: "monthly" },
     { label: "Per vecka", value: "biweekly" },
+  ];
+
+  const dateRangeItem: ISelectItems[] = [
+    { value: "all", label: "Alla" },
+    { label: "Per månad", value: "monthly" },
+    { value: "all", label: "Alla" },
   ];
 
   const handleFilterChange = (
@@ -96,7 +103,6 @@ export default function TransactionsFilter() {
               }
               selectItems={paymentTypeItems}
             />
-
             <Select
               inputLabel="Installment Frequency"
               valueSelect={state.filter.installmentFrequency}
@@ -104,6 +110,18 @@ export default function TransactionsFilter() {
                 handleFilterChange("installmentFrequency", e.target.value)
               }
               selectItems={installmentFreqItems}
+            />
+            <DatePicker
+              name="startDate"
+              inputLabel="Datum från"
+              onChange={(e) => handleFilterChange("startDate", e.target.value)}
+              placeholder=""
+            />
+            <DatePicker
+              inputLabel="Datum till"
+              name="endDate"
+              onChange={(e) => handleFilterChange("endDate", e.target.value)}
+              placeholder=""
             />
           </>
         )}

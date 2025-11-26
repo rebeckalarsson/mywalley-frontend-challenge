@@ -22,4 +22,6 @@ export interface ITransactionFilter {
   paymentType: PaymentType | "all";
   paymentMethod: PaymentMethodType | "all";
   installmentFrequency: InstallmentFrequency | "all";
+  startDate: string;
+  endDate: string;
 }
