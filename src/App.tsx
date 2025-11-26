@@ -9,8 +9,16 @@ import ErrorBoundary from "./page-views/ErrorBoundary";
 import Transactions from "./pages/Transactions";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import { useReducer } from "react";
+import {
+  initialState,
+  transactionReducer,
+} from "./context/transaction-reducer";
+import { TransactionContext } from "./context/transaction-context";
 
 export default function App() {
+  const [state, dispatch] = useReducer(transactionReducer, initialState);
+
   return (
     <ErrorBoundary
       fallback={
@@ -24,14 +32,16 @@ export default function App() {
           Skip to main content
         </a>
         <div className="app">
-          <Header />
-          <main id="main-content">
-            <Routes>
-              <Route path="/" element={<Transactions />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-          <Footer />
+          <TransactionContext value={{ state, dispatch }}>
+            <Header />
+            <main id="main-content">
+              <Routes>
+                <Route path="/" element={<Transactions />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </main>
+            <Footer />
+          </TransactionContext>
         </div>
       </Router>
     </ErrorBoundary>

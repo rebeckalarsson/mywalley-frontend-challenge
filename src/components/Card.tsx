@@ -10,8 +10,14 @@ export function CardItem({ onClick, children, className }: ICardProps) {
   return (
     <div
       onClick={onClick}
-      onKeyDown={(e) => (e.key === "Enter" ? onClick : {})}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && onClick) {
+          e.preventDefault();
+          onClick();
+        }
+      }}
       className={clsx("card", className)}
+      tabIndex={0}
     >
       {children}
     </div>

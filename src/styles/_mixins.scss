@@ -97,6 +97,7 @@
   justify-content: center;
 }
 
+// Spinner comp
 @mixin spinner {
   display: inline-block;
   width: 50px;
@@ -117,17 +118,4 @@
   to {
     -webkit-transform: rotate(360deg);
   }
-}
-
-@mixin drawer {
-  // height: 100vh;
-  width: 100vw;
-  background-color: $color-primary-light;
-  // transition: all 0.3s ease-in-out;
-  // transform: translate(-200px);
-  // position: absolute;
-
-  // .open {
-  //   transform: translate(0);
-  // }
 }

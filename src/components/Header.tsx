@@ -6,9 +6,7 @@ export default function Header() {
   let navigate = useNavigate();
   return (
     <header>
-      <h1 aria-label="navigate home" onClick={() => navigate("/")}>
-        Walley
-      </h1>
+      <div onClick={() => navigate("/")}>Walley</div>
       <nav aria-label="global page nav">
         <ul>
           <li>
@@ -17,7 +15,7 @@ export default function Header() {
               aria-label="navigate home button"
               onClick={() => navigate("/")}
             >
-              <House size={16} aria-label="house: home" />
+              <House size={16} aria-label="house: home" role="img" />
             </Button>
           </li>
           <li>

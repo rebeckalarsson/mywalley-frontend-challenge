@@ -48,10 +48,10 @@ const InstallmentPlanContainer = ({
     <div>
       {Object.entries(installmentPlan).map(([key, value]) => {
         return (
-          <>
+          <div key={key}>
             <div>{key}</div>
             <div>{value}</div>
-          </>
+          </div>
         );
       })}
     </div>

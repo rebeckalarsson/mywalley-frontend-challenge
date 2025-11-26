@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { getTransations } from "../api/getTransactions";
 import Spinner from "../components/Spinner";
 import Drawer from "../components/Drawer";
@@ -8,10 +8,13 @@ import TransactionsGrid from "../page-views/TransactionsGrid";
 import { SearchX } from "lucide-react";
 import Button from "../components/Button";
 import TransactionsDetails from "../page-views/TransactionsDetails";
+import TransactionsFilter from "../page-views/TransactionsFilter";
+import { TransactionContext } from "../context/transaction-context";
+import { filterTransactions } from "../utils/filterTransactions";
 
 export default function Transactions() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const { state, dispatch } = useContext(TransactionContext);
   const [drawer, setDrawer] = useState<{
     content?: Transaction;
     isOpen: boolean;
@@ -36,7 +39,10 @@ export default function Transactions() {
     await getTransations()
       .then((resp) => {
         console.log({ resp });
-        setTransactions(resp.transactions);
+        dispatch({
+          type: "UPDATE_TRANSACTIONS",
+          data: resp.transactions,
+        });
         setLoading(false);
       })
       .catch((err) => {
@@ -54,8 +60,16 @@ export default function Transactions() {
   }, []);
 
   useEffect(() => {
-    console.log({ transactions, length: transactions.length });
-  }, [transactions]);
+    console.log({
+      transactions: state.transactions,
+      length: state.transactions.length,
+    });
+  }, [state.transactions]);
+
+  const filteredTransactions = useMemo(
+    () => filterTransactions(state.transactions, state.filter),
+    [state.transactions, state.filter]
+  );
 
   return (
     <>
@@ -83,27 +97,42 @@ export default function Transactions() {
                 <Button
                   variant="primary"
                   onClick={closeDrawer}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" ? closeDrawer : () => {}
-                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      closeDrawer();
+                    }
+                  }}
                 >
                   Stäng
                 </Button>
               </div>
             }
           />
-          {transactions.length ? (
-            <div className="transactions-container">
-              {transactions.map((trans, _i) => {
-                return (
-                  <CardItem
-                    key={"transaction-card-key" + _i}
-                    onClick={() => openDrawer(trans, true)}
-                    children={<TransactionsGrid transaction={trans} />}
-                  />
-                );
-              })}
-            </div>
+          {state.transactions.length ? (
+            <>
+              <TransactionsFilter />
+              <div className="transactions-container">
+                {filteredTransactions.length ? (
+                  filteredTransactions.map((trans, _i) => {
+                    return (
+                      <CardItem
+                        key={"transaction-card-key" + _i}
+                        onClick={() => openDrawer(trans, true)}
+                        children={<TransactionsGrid transaction={trans} />}
+                      />
+                    );
+                  })
+                ) : (
+                  <CardItem className="no-content-container">
+                    <SearchX size={20} area-label="no content" />
+                    <p>
+                      Du har inga transaktioner som stämmer in på dessa filter.
+                    </p>
+                  </CardItem>
+                )}
+              </div>
+            </>
           ) : (
             <CardItem className="no-content-container">
               <SearchX size={20} area-label="no content" />
