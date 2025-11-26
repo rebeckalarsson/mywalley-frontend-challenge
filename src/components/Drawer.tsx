@@ -1,17 +1,17 @@
-import clsx from "clsx";
+import { Drawer as DrawerComp, type DrawerProps } from "@mui/material";
 
-export interface IDrawerProps {
-  isOpen: boolean;
-  children: React.ReactNode;
+export interface IDrawerProps extends DrawerProps {
+  onCloseDrawer: () => void;
 }
 
-export default function Drawer({ isOpen, children }: IDrawerProps) {
+export default function Drawer({
+  children,
+  onCloseDrawer,
+  ...rest
+}: IDrawerProps) {
   return (
-    <div
-      className={clsx(isOpen && "open", "drawer")}
-      aria-label="drawer content container"
-    >
-      <div className="drawer-content-container">{children}</div>
-    </div>
+    <DrawerComp onClose={onCloseDrawer} {...rest}>
+      {children}
+    </DrawerComp>
   );
 }

@@ -6,6 +6,8 @@ import type { Transaction } from "../types/transaction";
 import { CardItem } from "../components/Card";
 import TransactionsGrid from "../page-views/TransactionsGrid";
 import { SearchX } from "lucide-react";
+import Button from "../components/Button";
+import TransactionsDetails from "../page-views/TransactionsDetails";
 
 export default function Transactions() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -17,11 +19,18 @@ export default function Transactions() {
     content: undefined,
     isOpen: false,
   });
-  const toggleDrawer = (transaction: Transaction, shouldOpen: boolean) =>
+  const openDrawer = (transaction: Transaction, shouldOpen: boolean) =>
     setDrawer({
       content: transaction,
       isOpen: shouldOpen,
     });
+
+  const closeDrawer = () => {
+    setDrawer({
+      ...drawer,
+      isOpen: false,
+    });
+  };
 
   const fetchTransactions = async () => {
     await getTransations()
@@ -55,11 +64,13 @@ export default function Transactions() {
       ) : (
         <div>
           <Drawer
-            isOpen={drawer.isOpen}
+            anchor="right"
+            open={drawer.isOpen}
+            onCloseDrawer={closeDrawer}
             children={
-              <>
+              <div>
                 {drawer.content ? (
-                  <div>{drawer.content.id}</div>
+                  <TransactionsDetails transaction={drawer.content} />
                 ) : (
                   <CardItem className="no-content-container">
                     <SearchX size={20} area-label="no content" />
@@ -69,7 +80,16 @@ export default function Transactions() {
                     </p>
                   </CardItem>
                 )}
-              </>
+                <Button
+                  variant="primary"
+                  onClick={closeDrawer}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" ? closeDrawer : () => {}
+                  }
+                >
+                  Stäng
+                </Button>
+              </div>
             }
           />
           {transactions.length ? (
@@ -77,13 +97,9 @@ export default function Transactions() {
               {transactions.map((trans, _i) => {
                 return (
                   <CardItem
-                    onClick={() => toggleDrawer(trans, true)}
-                    children={
-                      <TransactionsGrid
-                        transaction={trans}
-                        key={"transaction-key" + _i}
-                      />
-                    }
+                    key={"transaction-card-key" + _i}
+                    onClick={() => openDrawer(trans, true)}
+                    children={<TransactionsGrid transaction={trans} />}
                   />
                 );
               })}

@@ -31,9 +31,14 @@ body {
   }
 }
 
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vw;
+}
+
 #main-content,
-header,
-footer {
+header {
   margin: $spacing-sm;
 
   @include tablet {
@@ -108,14 +113,14 @@ textarea {
 }
 
 .footer {
-  position: fixed;
-  bottom: 0;
   width: 100%;
   background-color: $color-primary-dark;
   color: $color-primary-light;
   text-align: center;
+  margin-top: auto;
   margin-left: auto;
   margin-right: auto;
+  padding: 32px;
 
   @include desktop {
     max-width: $breakpoint-wide;
@@ -157,5 +162,37 @@ header {
     height: 2rem;
     width: 2rem;
     stroke: $color-info;
+  }
+}
+
+.transactions-container {
+  display: grid;
+  row-gap: 0.75rem;
+}
+
+.transation-grid {
+  .merchant {
+    grid-column: 1 / span 3;
+  }
+
+  .amount {
+    grid-column: 1 / span 3;
+  }
+
+  .date {
+    grid-column: 1 / span 3;
+  }
+
+  .payment-type {
+    grid-column: 1 / span 3;
+  }
+
+  .grid-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  @include desktop {
   }
 }
